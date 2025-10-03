@@ -940,6 +940,7 @@ func Build(pkgName, outpath, tmpdir string, config *compileopts.Config) (BuildRe
 					args := []string{
 						"component",
 						"embed",
+						"-w", witWorld,
 						wasiPackage,
 						componentEmbedInputFile,
 						"-o", result.Binary,
