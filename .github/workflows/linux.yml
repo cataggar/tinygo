@@ -18,7 +18,7 @@ jobs:
     # statically linked binary.
     runs-on: ubuntu-latest
     container:
-      image: golang:1.24-alpine
+      image: golang:1.25-alpine
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
@@ -26,7 +26,7 @@ jobs:
         # tar: needed for actions/cache@v4
         # git+openssh: needed for checkout (I think?)
         # ruby: needed to install fpm
-        run: apk add tar git openssh make g++ ruby-dev
+        run: apk add tar git openssh make g++ ruby-dev mold
       - name: Work around CVE-2022-24765
         # We're not on a multi-user machine, so this is safe.
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -48,7 +48,7 @@ jobs:
         uses: actions/cache/restore@v4
         id: cache-llvm-source
         with:
-          key: llvm-source-19-linux-alpine-v1
+          key: llvm-source-20-linux-alpine-v1
           path: |
             llvm-project/clang/lib/Headers
             llvm-project/clang/include
@@ -73,7 +73,7 @@ jobs:
         uses: actions/cache/restore@v4
         id: cache-llvm-build
         with:
-          key: llvm-build-19-linux-alpine-v1
+          key: llvm-build-20-linux-alpine-v1
           path: llvm-build
       - name: Build LLVM
         if: steps.cache-llvm-build.outputs.cache-hit != 'true'
@@ -137,7 +137,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.25.0'
           cache: true
       - name: Install wasmtime
         uses: bytecodealliance/actions/wasmtime/setup@v1
@@ -181,7 +181,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.25.0'
           cache: true
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -197,7 +197,7 @@ jobs:
         uses: actions/cache/restore@v4
         id: cache-llvm-source
         with:
-          key: llvm-source-19-linux-asserts-v1
+          key: llvm-source-20-linux-asserts-v1
           path: |
             llvm-project/clang/lib/Headers
             llvm-project/clang/include
@@ -222,7 +222,7 @@ jobs:
         uses: actions/cache/restore@v4
         id: cache-llvm-build
         with:
-          key: llvm-build-19-linux-asserts-v1
+          key: llvm-build-20-linux-asserts-v1
           path: llvm-build
       - name: Build LLVM
         if: steps.cache-llvm-build.outputs.cache-hit != 'true'
@@ -298,13 +298,13 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.24'
+          go-version: '1.25.0'
           cache: true
       - name: Restore LLVM source cache
         uses: actions/cache/restore@v4
         id: cache-llvm-source
         with:
-          key: llvm-source-19-linux-v1
+          key: llvm-source-20-linux-v1
           path: |
             llvm-project/clang/lib/Headers
             llvm-project/clang/include
@@ -329,7 +329,7 @@ jobs:
         uses: actions/cache/restore@v4
         id: cache-llvm-build
         with:
-          key: llvm-build-19-linux-${{ matrix.goarch }}-v3
+          key: llvm-build-20-linux-${{ matrix.goarch }}-v1
           path: llvm-build
       - name: Build LLVM
         if: steps.cache-llvm-build.outputs.cache-hit != 'true'
