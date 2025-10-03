@@ -52,6 +52,11 @@ func newTimer(when, period int64, f func(arg any, seq uintptr, delta int64), arg
 
 //go:linkname stopTimer time.stopTimer
 func stopTimer(tim *timeTimer) bool {
+	// Set period to 0 to prevent the timer from being re-added to the queue
+	// if the callback is currently running. This must be done before removing
+	// the timer to avoid a race condition where the callback re-adds the timer
+	// after it's been removed.
+	tim.timer.period = 0
 	return removeTimer(&tim.timer) != nil
 }
 
