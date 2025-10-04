@@ -1,11 +1,7 @@
 name: macOS
 
 on:
-  pull_request:
-  push:
-    branches:
-      - dev
-      - release
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
